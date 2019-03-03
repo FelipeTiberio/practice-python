@@ -48,33 +48,35 @@ class Graph(object):
 	    edge_list = []
 
 	    for edge in self.edges:
-	    	value = edge.value
-	    	from_node_value = edge.node_from.value
-	    	to_node_value = edge.node_to.value
-	    	tupla = (value, from_node_value, to_node_value)
+	    	tupla = (edge.value, edge.node_from.value, edge.node_to.value)
 	    	edge_list.append(tupla)
 	    return edge_list
+	
+	# Busca o maior incide de todos os nós
+	def find_max_index(self):
+		max_index = -1
+		if len(self.nodes):
+			for node in self.nodes:
+				if node.value > max_index:
+					max_index = node.value
+		return max_index
 
-'''
-    def get_adjacency_list(self):
+	def get_adjacency_list(self):
+		max_index = self.find_max_index()
+		adjacency_list = [None] * (max_index +1)
+		for edge_object in self.edges:
+			if adjacency_list[edge_object.node_from.value]:
+				adjacency_list[edge_object.node_from.value].append((edge_object.node_to.value, edge_object.value))
+			else:
+				adjacency_list[edge_object.node_from.value] = [(edge_object.node_to.value, edge_object.value)]
+		return adjacency_list
 
-    	 """Don't return any Node or Edge objects!
-        You'll return a list of lists.
-        The indecies of the outer list represent
-        "from" nodes.
-        Each section in the list will store a list
-        of tuples that looks like this:
-        (To Node, Edge Value)"""
-         
-        
-    def get_adjacency_matrix(self):
-        """Return a matrix, or 2D list.
-        Row numbers represent from nodes,
-        column numbers represent to nodes.
-        Store the edge values in each spot,
-        and a 0 if no edge exists."""
-'''        
-
+	def get_adjacency_matrix(self):
+		max_index = self.find_max_index()
+		adjacency_matrix = [[0 for i in range(max_index + 1)] for j in range(max_index + 1)]
+		for edge_object in self.edges:
+			adjacency_matrix[edge_object.node_from.value][edge_object.node_to.value] = edge_object.value
+		return adjacency_matrix
 
 graph = Graph()
 graph.insert_edge(100, 1, 2)
@@ -84,6 +86,6 @@ graph.insert_edge(103, 3, 4)
 # Should be [(100, 1, 2), (101, 1, 3), (102, 1, 4), (103, 3, 4)]
 print (graph.get_edge_list())
 # Should be [None, [(2, 100), (3, 101), (4, 102)], None, [(4, 103)], None]
-#print graph.get_adjacency_list()
+print (graph.get_adjacency_list())
 # Should be [[0, 0, 0, 0, 0], [0, 0, 100, 101, 102], [0, 0, 0, 0, 0], [0, 0, 0, 0, 103], [0, 0, 0, 0, 0]]
-#print graph.get_adjacency_matrix()
+print (graph.get_adjacency_matrix())
