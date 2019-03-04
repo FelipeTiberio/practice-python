@@ -17,10 +17,12 @@ class Graph(object):
 		self.edges = edges
 	
 	def insert_node(self, new_node_val):
+		''' Insere um novo vértice no grafo, recebe apenas o valor '''
 		new_node = Node(new_node_val)
 		self.nodes.append(new_node)
 
 	def insert_edge(self, new_edge_val, node_from_val, node_to_val):
+		'''Insere uma nova aresta no grafo recebe (Valor edge, node from val, node to val) '''
 		from_found = None 
 		to_found = None 
 
@@ -52,8 +54,9 @@ class Graph(object):
 	    	edge_list.append(tupla)
 	    return edge_list
 	
-	# Busca o maior incide de todos os nós
+
 	def find_max_index(self):
+		'''Busca o maior incide de todos os nós '''
 		max_index = -1
 		if len(self.nodes):
 			for node in self.nodes:
@@ -89,3 +92,4 @@ print (graph.get_edge_list())
 print (graph.get_adjacency_list())
 # Should be [[0, 0, 0, 0, 0], [0, 0, 100, 101, 102], [0, 0, 0, 0, 0], [0, 0, 0, 0, 103], [0, 0, 0, 0, 0]]
 print (graph.get_adjacency_matrix())
+
