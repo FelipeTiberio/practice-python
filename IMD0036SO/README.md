@@ -1,4 +1,4 @@
-##Desenvolver um programa gerenciador de processos.
+### Desenvolver um programa gerenciador de processos.
 
 	[ ] presentando-os em uma tela, mostrando o PID e o usuário que o criou, no mínimo.
 
@@ -10,3 +10,9 @@
 	([] Todo processo deve ficar vivo por no máximo 30 segundos se não for morto por outro processo.)
 
 	[ ] A tela de exibição deve ser sempre atualizada quando houver criação e no término de um novo processo.
+
+
+## links úteis :
+	
+	comodo ps e suas flas:
+	https://www.tecmint.com/ps-command-examples-for-linux-process-monitoring/
