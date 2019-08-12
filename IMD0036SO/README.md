@@ -1,6 +1,6 @@
 ### Desenvolver um programa gerenciador de processos.
 
-	[ ] presentando-os em uma tela, mostrando o PID e o usuário que o criou, no mínimo.
+	[x] presentando-os em uma tela, mostrando o PID e o usuário que o criou, no mínimo.
 
 	[ ] Apresentar uma opção na tela para se criar mais processos.
 
