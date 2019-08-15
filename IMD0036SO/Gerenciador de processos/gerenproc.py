@@ -7,11 +7,11 @@ def proc_start():
 	processo criado """
 	if os.getpid() != 0: # Zero significa que é a cópia
 		newpid = os.fork()
-	if newpid != 0:
 		print( " ** Processo com pid", newpid, "criado. ")	
+	
 	if newpid == 0:
 		os._exit(0)
-		return
+		
 
 	return newpid
 
@@ -35,7 +35,7 @@ def get_process( mtx, user ='all' , amount = -1, fullinfo = True):
 		@arg fullinfo, Quando False, retorna apenas uma quantidade minima de informações de cada processo 
 			já quando True impre todo o retorno do comando ps -flag
 	"""
-	is_first_line  = True
+	#is_first_line  = True
 	str_formated = []
 
 	for line in mtx:
@@ -43,35 +43,43 @@ def get_process( mtx, user ='all' , amount = -1, fullinfo = True):
 			if user == 'all' and fullinfo:
 				str_aux = "| {user:12s} {pid:5s} {men:5s} {comand:56s} {pipe:5s}".format(user = line[0], pid=line[1], cpr= line[2], men= line[3], comand=line[10].split()[0],pipe="|" )
 		str_formated.append(str_aux)
-
 	return str_formated 
-			
+
+
+def menu():
+	if os.getpid == 0:
+		os._exit(0)
+	print("** \t\t Menu \t\t **")
+	print("1. Digite 1 para inicializar mais processos. ")
+	print("2. Digite 2 para finalizar algum processo ")
+	op = input()
+
+	if op == "1":
+		proc_start()
+		#@TODO Imprimir aqui a nova lista de processos com destaque aos novos processos 
+	if op == "2":
+		#@TODO opção para finalizar os processos 
+		return
+
 ### debug 
 mtx = get_matrix_process( checkout_comand( teste2 ))
 x = 0
 
 
 while True:
-	if os.getpid() == 0:
-		continue
+		
+	pid_corrente = os.getpid()
 
-	if os.getpid() != 0:
+	if pid_corrente == 0:
+		os._exit(0)
+		continue
+	
+	print("pid corrente",pid_corrente, " ",  os.getpid())
+
+	if pid_corrente != 0:
 		for i in get_process(mtx):
 			print(i)
-			if( x >= 10):
-				break
-			x+=1
-
-		print(" Vc quer criar mais um processo ?")
-		entrada = input()
-
-		if entrada == "s":
-			proc_start()
-		else:
-			continue
-
-			
-
+		menu()
 
 	
-		
+	
