@@ -1,9 +1,18 @@
 
 from threading import Thread, Lock
 from random import randint
-import time
+import time, os
 
-TEMPOMAXIMO_ESPERA = 5
+TEMPOMAXIMO_ESPERA = 10
+
+def esperarFinalizar():
+    input_data = None
+
+    while True:
+        input_data = input()
+        if input_data != None:
+            break
+    os._exit(0)
 
 class Filosofo (Thread):
     def __init__(self, mesa, fil_id):
@@ -43,20 +52,21 @@ class Mesa():
     def getForks(self, philosopher_id):
         left = philosopher_id
         right = (philosopher_id + 1 ) % 5
-        print("Filosofo", philosopher_id +1 , "está PEGANDO OS GARFOS..")
+        print("Filosofo", philosopher_id + 1 , "está PEGANDO OS GARFOS..")
         self.garfos[left].acquire()
         self.garfos[right].acquire() 
 
     def leaveForks(self, philosopher_id):
         left = philosopher_id
         right = (philosopher_id + 1 ) % 5
-        print("Filosofo", philosopher_id, "está LIBERANDO OS GARFOS..")
+        print("Filosofo", philosopher_id + 1 , "está LIBERANDO OS GARFOS..")
         self.garfos[left].release()
         self.garfos[right].release() 
 
 if __name__ == '__main__':    
     
-    print( " ** Jantar dos filosofos **")
+    print( " ** \t\tJantar dos filosofos\t\t **")
+    print("\n \t QUAL QUER INPUT IRÁ FINALIZAR O PROGRAMA \n")
     mesa = Mesa()
     filosofos = []
 
@@ -65,6 +75,8 @@ if __name__ == '__main__':
 
     for i in range(5):
         filosofos[i].start()
+
+    Thread( target = esperarFinalizar).start()
 
 
 
