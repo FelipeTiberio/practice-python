@@ -1,5 +1,5 @@
-from datetime import datetime   # Necessario para pegar a hora do sistema 
-from threading import Thread
+
+from threading import Thread, Lock
 from random import randint
 import time
 
@@ -7,7 +7,7 @@ TEMPOMAXIMO_ESPERA = 5
 
 class Filosofo (Thread):
     def __init__(self, mesa, fil_id):
-        super(Filosofo).__init__()
+        super(Filosofo,self).__init__()
         self.mesa = mesa
         self.philosopher_id = fil_id
         self._is_running = True
@@ -23,16 +23,53 @@ class Filosofo (Thread):
             self.leaveForks()
 
     def think(self,time_wait):
+        print("Filosofo", self.philosopher_id + 1 , "está PENSNADO... " )
         time.sleep(randint(0, time_wait))
 
     def eat(self,time_wait):
+        print('Filosofo', self.philosopher_id + 1,"está COMENDO...")
         time.sleep(randint(0, time_wait))
 
     def forks(self):
         self.mesa.getForks(self.philosopher_id)
 
-    def leaveForks(self, ):
+    def leaveForks(self):
         self.mesa.leaveForks(self.philosopher_id)
+
+class Mesa():
+    def __init__(self):
+        self.garfos = [Lock(),Lock(),Lock(),Lock(),Lock()]
+    
+    def getForks(self, philosopher_id):
+        left = philosopher_id
+        right = (philosopher_id + 1 ) % 5
+        print("Filosofo", philosopher_id +1 , "está PEGANDO OS GARFOS..")
+        self.garfos[left].acquire()
+        self.garfos[right].acquire() 
+
+    def leaveForks(self, philosopher_id):
+        left = philosopher_id
+        right = (philosopher_id + 1 ) % 5
+        print("Filosofo", philosopher_id, "está LIBERANDO OS GARFOS..")
+        self.garfos[left].release()
+        self.garfos[right].release() 
+
+if __name__ == '__main__':    
+    
+    print( " ** Jantar dos filosofos **")
+    mesa = Mesa()
+    filosofos = []
+
+    for i in range(5):
+        filosofos.append(Filosofo(mesa, i) )
+
+    for i in range(5):
+        filosofos[i].start()
+
+
+
+
+        
 
     
 
