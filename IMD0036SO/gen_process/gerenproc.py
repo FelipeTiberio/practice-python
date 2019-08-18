@@ -1,6 +1,6 @@
 import  subprocess, os
-teste2= 'ps -au'
-#teste2= 'ps -aux'
+ENTRADACOMAND1= 'ps -aux | grep python3'
+
 
 def proc_start():
 	""" Inicializa um novo processo filho retornando o pid correspondente ao 
@@ -62,13 +62,14 @@ def menu():
 		return
 
 ### debug 
-mtx = get_matrix_process( checkout_comand( teste2 ))
+
 x = 0
 
 
 while True:
 		
 	pid_corrente = os.getpid()
+	mtx = get_matrix_process( checkout_comand( ENTRADACOMAND1 ))
 
 	if pid_corrente == 0:
 		os._exit(0)
