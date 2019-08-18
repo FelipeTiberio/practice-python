@@ -11,8 +11,6 @@ def proc_start():
 	
 	if newpid == 0:
 		os._exit(0)
-		
-
 	return newpid
 
 def checkout_comand( args  ):
@@ -45,6 +43,18 @@ def get_process( mtx, user ='all' , amount = -1, fullinfo = True):
 		str_formated.append(str_aux)
 	return str_formated 
 
+def finalizarProcesso( pid ):
+	""" Dado o pid de um processo como input, tenta finalizar-lo """
+
+	if os.getpid() != 0:
+		try:  
+			os.waitpid(int(pid),0)
+			subprocess.call(['sleep','1'])
+		except:
+			print("   \t\t--- VALOR DE PID NÂO É VÀlIDO ----")
+			input()
+			return False
+	return True
 
 def menu():
 	if os.getpid == 0:
@@ -59,6 +69,9 @@ def menu():
 		#@TODO Imprimir aqui a nova lista de processos com destaque aos novos processos 
 	if op == "2":
 		#@TODO opção para finalizar os processos 
+		print(" \n\t DIGITE O VALOR DO PID PARA SER FINALIZADO ")
+		op = input()
+		finalizarProcesso(op)
 		return
 
 ### debug 

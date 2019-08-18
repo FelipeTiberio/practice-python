@@ -4,7 +4,7 @@
 
 	[ ] Apresentar uma opção na tela para se criar mais processos.
 
-	[ ] Encerrar um processo através de alguma opção na tela, passando o PID do processo que se deseja encerrar.
+	[x] Encerrar um processo através de alguma opção na tela, passando o PID do processo que se deseja encerrar.
 
 	[ ] Os processos que vocês criaram devem dobrar a cada 10 segundos.
 	([ ] Todo processo deve ficar vivo por no máximo 30 segundos se não for morto por outro processo.)
