@@ -9,7 +9,7 @@
 	[X] Os processos que vocês criaram devem dobrar a cada 10 segundos.
 	([X] Todo processo deve ficar vivo por no máximo 30 segundos se não for morto por outro processo.)
 
-	[ ] A tela de exibição deve ser sempre atualizada quando houver criação e no término de um novo processo.
+	[x] A tela de exibição deve ser sempre atualizada quando houver criação e no término de um novo processo.
 
 
 ## links úteis :
