@@ -2,19 +2,19 @@ from threading import Thread, Lock, Condition, enumerate
 from random import randint
 import time, os
 
-Quantum = 5 # Tempo que cada processo terá no processador para terminar sua tarefa antes de ir para o fim da fila   
+Quantum       = 5 # Tempo que cada processo tera no processador para terminar sua tarefa antes de ir para o fim da fila   
 
 #'''Eu fiz com que cada um das thread tenham um tempo de processamento randomico entre MIN e MAX '''
-MIN = 5  
-MAX = 15
+MIN           = 5  
+MAX           = 15
                 
-MAXTHREADS = 5 # O número maximo de threads eh entre 3 e MAXTHREADS
+MAXTHREADS    = 5 # O número maximo de threads eh entre 3 e MAXTHREADS
 
 filaDeThreads = [] 
 
 def cpu( thread_da_vez  ):
     """Executa uma thread ate que ela finalize seu processo \n
-       a thread pode não ter sido iniciada ainda, ou esta esperando """
+       a thread pode nao ter sido iniciada ainda, ou esta esperando """
 
     if not thread_da_vez.isAlive():
         thread_da_vez.start()
@@ -53,19 +53,6 @@ class MinhaThread( Thread ):
             self.condition.notify()
             self.can_woke = True
 
-
-def configuracao_inicial():
-    print("| Quantidade de Threads: ", len(filaDeThreads) , " Tempo de quantum de cpu :", Quantum, "segundos |\n")
-
-def polular_fila():
-    numero_de_threads = randint(3, MAXTHREADS)
-    id_thread = 1
-
-    for i in range(0,numero_de_threads):
-        tempo_processamento = randint(MIN, MAX)
-        filaDeThreads.append( MinhaThread(id=id_thread, tempo=tempo_processamento))
-        id_thread +=1
-
 def round_robin():
     
     while len(filaDeThreads) > 0  :
@@ -78,6 +65,17 @@ def round_robin():
          thread_da_vez.esperar()
          filaDeThreads.append(thread_da_vez)
 
+def configuracao_inicial():
+    print("| Quantidade de Threads: ", len(filaDeThreads) , " Tempo de quantum de cpu :", Quantum, "segundos |\n")
+
+def polular_fila():
+    numero_de_threads = randint(3, MAXTHREADS)
+    id_thread = 1
+
+    for i in range(0,numero_de_threads):
+        tempo_processamento = randint(MIN, MAX)
+        filaDeThreads.append( MinhaThread(id=id_thread, tempo=tempo_processamento))
+        id_thread +=1
 
 if __name__ == '__main__':   
 

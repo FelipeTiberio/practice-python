@@ -13,7 +13,7 @@
  - [x] (Os programas deverão conter além dos algoritmos de escalonamento uma função CPU onde deverá receber 
        como parâmetro uma thread e iniciar a sua execução.)
 
- - [ ] Cada função que as threadas estarão executando receberão como parâmetro um número, 
+ - [x] Cada função que as threadas estarão executando receberão como parâmetro um número, 
     esse número deverá ser o tempo que a thread vai executar, simbolizando o tempo que ela tem 
     dentro da CPU. Quando esse tempo acaba o algortimo de escalonamento deverá escolher uma outra
     thread para ser executada pela CPU, chamando a função CPU novamente e passando a thread escolhida como parâmetro.
