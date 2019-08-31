@@ -2,7 +2,7 @@
        onde os processos são executados um atrás do outro e não uso de prioridades. 
        O primeiro processo depois de executado deverá retornar para o final da fila.)
 
- - [ ] (O segundo algoritmo a ser implementado é o Por Prioridades, onde existem diversas
+ - [x] (O segundo algoritmo a ser implementado é o Por Prioridades, onde existem diversas
     classes de prioridades de processos , onde os processos dentro dessa classe são
     executados de forma circular. A  classe com prioridade mais alta deve ser executada 
     primeiro antes das outras, e, as outras só poderam ser executadas quando a

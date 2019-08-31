@@ -23,6 +23,7 @@ def cpu( thread_da_vez  ):
         thread_da_vez.continuar_processo()
 
 class MinhaThread( Thread ):
+
     def __init__(self, id, tempo):
         super(MinhaThread, self).__init__()
         self.id = id
@@ -54,7 +55,7 @@ class MinhaThread( Thread ):
             self.can_woke = True
 
 def round_robin():
-    
+    """ """
     while len(filaDeThreads) > 0  :
 
          thread_da_vez = filaDeThreads.pop(0)

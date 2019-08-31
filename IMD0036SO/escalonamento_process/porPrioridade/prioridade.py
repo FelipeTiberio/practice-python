@@ -8,14 +8,13 @@ Quantum = 5 # Tempo que cada processo tera no processador para terminar sua tare
 MIN = 5  
 MAX = 15
                 
-MAXTHREADS = 5 # O numero maximo de threads eh entre 3 e MAXTHREADS
+MAXTHREADS = 7 # O numero maximo de threads eh entre 3 e MAXTHREADS
 
 MAXVALORPRIORIDADE = 5 # IREI gerar os valores de prioridade de forma randomica de 0 a MAXVALORPRIORIDADE
 
 filasDePrioridade = {} # {valor_prioridade : fila com o valor_prioridade} 
 
-IdFilasAumentaPrioridade = [] # id para evitar stavation
- 
+id_thread = 1 # apenas uma variavez para usar como id de thread
 
 def cpu( thread_da_vez  ):
     """Executa uma thread ate que ela finalize seu processo \n
@@ -56,7 +55,7 @@ class MinhaThread( Thread ):
             for i in range(self.tempo):
                 if not self.can_woke:
                     self.condition.wait()  
-                print("* Processando thread n", self.id  , "falta", self.falta, " para acabar meus procesos xD.")
+                print("* Processando thread nº", self.id  , "falta", self.falta, " para acabar meus procesos xD.")
                 time.sleep(1)
                 self.falta  = self.falta -1 
 
@@ -87,7 +86,7 @@ def configuracao_inicial():
 def polular_fila():
     """ popula a fila com com todas as suas listas de prioridades, bem como, todas as threads s"""
     numero_de_threads = randint(3, MAXTHREADS)
-    id_thread = 1
+    global id_thread
 
     for valor_prioridade in range(0, MAXVALORPRIORIDADE):   # Chaves para o dicionario
         if valor_prioridade not in filasDePrioridade:
@@ -107,15 +106,30 @@ def porPrioridades():
             if(len(filasDePrioridade[chave]) == 0):               # Se A fila eh vazia, ir para a proxima.
                 i+=1
                 continue 
-            print("\t Iniando a fila de prioridade: ", i, "...") 
+            print("\t ** Iniando a fila de prioridade: ", i, "**") 
             round_robin(filasDePrioridade[chave])
             return
 
 def aumentarPrioridadeDeFila(): 
-    """ Metodo usando para evitar starvation """
-    pass
+    IdFilasAumentaPrioridade = [] # id para evitar stavation
+    
+    for chave in filasDePrioridade:
+        if( len(filasDePrioridade[chave]) != 0 and chave != 0 ):
+            IdFilasAumentaPrioridade.append(chave)
 
-if __name__ == '__main__':   
+    print("\n** Aumento a prioridade dos processos: ", end="")
+    for aux in IdFilasAumentaPrioridade:
+        print(aux," ", end='')
+    print(" para evitar STARVATION.")
+
+    for i in IdFilasAumentaPrioridade:
+        fila_para_aumentar = filasDePrioridade[i]
+        filasDePrioridade[i -1] = fila_para_aumentar
+        filasDePrioridade[i].clear() 
+
+if __name__ == '__main__': 
+
+    terminou = False
 
     polular_fila()
     configuracao_inicial()
@@ -127,10 +141,12 @@ if __name__ == '__main__':
 
     ''' Criando mais 3 threads '''
     MAXTHREADS = 3 
-    #@TODO aumentar prioridade 
+    aumentarPrioridadeDeFila()
     polular_fila()
     print()
     configuracao_inicial()
     print()
-    porPrioridades()
     
+    while terminou:
+        pass
+        #TODO fazer uma função que diz que a fila já acabou para todo as filas, rodar até terminar
