@@ -2,6 +2,8 @@ from threading import Thread, Condition, enumerate
 from random import randint
 import time
 
+GREEN = "\033[0;32m"
+RESET = "\033[0;0m"
 Quantum = 5 # Tempo que cada processo tera no processador para terminar sua tarefa antes de ir para o fim da fila   
 
 '''Cada um das thread tenham um tempo de processamento randomico entre MIN e MAX '''
@@ -80,8 +82,13 @@ def configuracao_inicial():
     quantidade_t = 0
     for i in filasDePrioridade:
         quantidade_t += len(filasDePrioridade[i])
-    print("| Quantidade de Threads: ", quantidade_t  , " Tempo de quantum de cpu :", Quantum, "segundos |") #TODO tenho de fazer um novo
-    #@TODO a quantidade de cada uma das filas
+    print(GREEN + "| Quantidade de Threads: ", quantidade_t  , " Tempo de quantum de cpu :", Quantum, "segundos |") #TODO tenho de fazer um novo
+    print("\tQuantidade de processos em cada uma das filas:")
+    n = 0
+    for chave in filasDePrioridade:
+        print("\t **Prioridade", n, " são:", len(filasDePrioridade[chave]))
+        n += 1
+    print(RESET)
 
 def polular_fila():
     """ popula a fila com com todas as suas listas de prioridades, bem como, todas as threads s"""
@@ -101,14 +108,15 @@ def polular_fila():
         id_thread           +=1
 
 def porPrioridades():
-       i = 0
-       for chave in filasDePrioridade:   # Iterando as filas.
-            if(len(filasDePrioridade[chave]) == 0):               # Se A fila eh vazia, ir para a proxima.
-                i+=1
-                continue 
-            print("\t ** Iniando a fila de prioridade: ", i, "**") 
-            round_robin(filasDePrioridade[chave])
-            return
+    """Processa a fila de prioridade nao vazia de prioridade mais alta  """
+    i = 0
+    for chave in filasDePrioridade:   # Iterando as filas.
+        if(len(filasDePrioridade[chave]) == 0):               # Se A fila eh vazia, ir para a proxima.
+            i+=1
+            continue 
+        print(GREEN + "\t ** Iniando a fila de prioridade: ", i, "**"+  RESET ) 
+        round_robin(filasDePrioridade[chave])
+        return
 
 def aumentarPrioridadeDeFila(): 
     IdFilasAumentaPrioridade = [] # id para evitar stavation
@@ -117,15 +125,25 @@ def aumentarPrioridadeDeFila():
         if( len(filasDePrioridade[chave]) != 0 and chave != 0 ):
             IdFilasAumentaPrioridade.append(chave)
 
-    print("\n** Aumento a prioridade dos processos: ", end="")
+    print(GREEN + "\n** Aumento em uma unidade os processos de prioridade : ", end="")
     for aux in IdFilasAumentaPrioridade:
         print(aux," ", end='')
-    print(" para evitar STARVATION.")
+    print(" para evitar STARVATION." + RESET)
 
     for i in IdFilasAumentaPrioridade:
         fila_para_aumentar = filasDePrioridade[i]
         filasDePrioridade[i -1] = fila_para_aumentar
-        filasDePrioridade[i].clear() 
+        filasDePrioridade[i].clear()
+
+def filasEstaoVazias():
+    """ retorna verdadeiro quando todas as filas de prioridade estao vazia, retorna falso caso contrario"""
+    n = 0
+    for chave in filasDePrioridade:
+        n += len(filasDePrioridade[chave])
+
+    if n == 0:
+        return True
+    return False
 
 if __name__ == '__main__': 
 
@@ -134,8 +152,7 @@ if __name__ == '__main__':
     polular_fila()
     configuracao_inicial()
 
-    ''' iniciado as três primeiras filas de prioridade  '''
-    porPrioridades()
+    ''' iniciado as filas de prioridade  '''
     porPrioridades()
     porPrioridades()
 
@@ -147,6 +164,11 @@ if __name__ == '__main__':
     configuracao_inicial()
     print()
     
-    while terminou:
-        pass
-        #TODO fazer uma função que diz que a fila já acabou para todo as filas, rodar até terminar
+    while True:
+        porPrioridades()
+
+        if filasEstaoVazias():
+            break
+
+    print( GREEN + "** Estado final de todas as filas **")
+    print(filasDePrioridade)

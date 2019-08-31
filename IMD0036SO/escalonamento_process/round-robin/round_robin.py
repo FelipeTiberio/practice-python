@@ -55,7 +55,8 @@ class MinhaThread( Thread ):
             self.can_woke = True
 
 def round_robin():
-    """ """
+    """ processa uma thread ate que ela nao tenha mais dados para serem carregas \n
+        ou o tempo de Quantum acabar, então a thread que estava em proecesso ira para o fim da fila  """
     while len(filaDeThreads) > 0  :
 
          thread_da_vez = filaDeThreads.pop(0)
