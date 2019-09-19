@@ -1,15 +1,14 @@
 import time
 
-
 def conta10():
     time.sleep(10)
     return True
             
 class Node():
-    def __init__(self, id):
-        self.id  = id 
+    def __init__(self, tempo, bitR = 1):
         self.next = None 
-        self.bitR_tempo = (0, None) 
+        self.bitR  = bitR
+        self.tempo = tempo
 
 class Gerenciado():
     def __init__(self):
@@ -33,40 +32,43 @@ class Gerenciado():
             else:
                 self.relogio.nodes[id].bitR_tempo[0] =  0
         return True
-    
-
-    
+       
 class Relogio():
     def __init__(self):
-        self.nodes = []
-        self.ultimaPagina = 0
-        self.counter = 0
-
-        for i in range(0,10):
-            self.nodes.append(  Node(i) )
-
-        for i in range(0,9):
-            self.nodes[i].next = self.nodes[i+1]
+        self.pages = []
+        self._poiter_lastpage = None
         
-        self.nodes[9].next = self.nodes[0]
-        
-    def addpagina(self, id ,tupla):
-        self.counter +=1
-        self.ultimaPagina += 1
-        self.ultimaPagina = self.ultimaPagina % 10
-        self.nodes[id] = tupla
+    def addPage(self,tempo):
 
-    def removerProcesso(self, id):
-        self.counter -= 1
+        if len(self.pages) >= 10:
+            self._swapPage(tempo)
+            return
 
-        if self.counter != 0:
-            self.relogio.nodes[id] = (0, None)
+        self.pages.append(Node(tempo))
+
+        if self._poiter_lastpage is None:
+            print("Colocando o primerio", tempo) #@DEBUG
+            self.pages[0].next = self.pages[0]
+            self._poiter_lastpage = 0
+
+        else:
+            id_old_lastposition  = len(self.pages) - 2
+            id_new_lastposition  = len(self.pages) - 1
+            print("Não está mais vázio", tempo)  #@DEBUG
+            self.pages[ id_old_lastposition ].next = self.pages[ id_new_lastposition  ]
+            self.pages[ id_new_lastposition  ].next = self.pages[0]
+    
+    def _swapPage(tempo):
+        pass
+
+if __name__ == '__main__':
+
+    relogio = Relogio()     
+    relogio.addPage(10)
+    relogio.addPage(20)
+    relogio.addPage(30)
+
+    for node in relogio.pages :
+        print(node.tempo,"->", node.next.tempo)
 
 
-relogio = Relogio()     
-
-for n in  relogio.nodes :
-    print(n.next.id)
-
-gerenciado =  Gerenciado()
-gerenciado.addProcesso(1)
