@@ -1,8 +1,10 @@
 import time
 from threading import Thread
 from multiprocessing.pool import ThreadPool
+from datetime import datetime
+import os
 
-MAXLENLINE = 3
+MAXLENLINE = 10
 TIMESLEEP = 10
 
 def conta10segundos(page):
@@ -45,11 +47,13 @@ class GerenciadorMemoria():
             op = input()
 
             if op == '1':
-                self.addProcesso(10)
+                print("\t Digite o tempo ")
+                now = datetime.now()
+                self.addProcesso(now)
             if op == '2':
                 self.listarPaginas()
             if op == '3':
-               pass
+               os._exit(0)
        
 class Relogio():
     def __init__(self):
@@ -108,10 +112,6 @@ class Relogio():
         self.pages[previousIdPage].next = newPage
         self.pages.insert(position, newPage)
             
-
-
-        
-
 
 if __name__ == '__main__':
 
