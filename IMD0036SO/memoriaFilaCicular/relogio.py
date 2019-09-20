@@ -2,11 +2,12 @@ import time
 from threading import Thread
 from multiprocessing.pool import ThreadPool
 
-MAXLENLINE = 10
+MAXLENLINE = 3
 TIMESLEEP = 10
 
-def conta10segundos():
+def conta10segundos(page):
     time.sleep(TIMESLEEP)
+    page.bitR = 0
     return True
             
 class Node():
@@ -16,11 +17,8 @@ class Node():
         self.tempo = tempo
 
     def whaitAndChangeBit(self):
-        finalizar = True
-        while not finalizar:
-            finaliar = ThreadPool(conta10segundos).start()
-    
-        self.bitR = 0
+        x = Thread(target=conta10segundos, args=(self,))
+        x.start()
             
 class GerenciadorMemoria():
     def __init__(self):
@@ -51,7 +49,7 @@ class GerenciadorMemoria():
             if op == '2':
                 self.listarPaginas()
             if op == '3':
-                pass
+               pass
        
 class Relogio():
     def __init__(self):
@@ -118,18 +116,6 @@ class Relogio():
 if __name__ == '__main__':
 
     gerenciado = GerenciadorMemoria()
-    '''
-    gerenciado.addProcesso(10)
-    gerenciado.addProcesso(20)
-    gerenciado.addProcesso(30)
-    gerenciado.addProcesso(40)  
-
-    relogio = gerenciado.relogio
-    
-    for node in relogio.pages :
-        print(node.tempo,"->", node.next.tempo)
-
-    gerenciado.listarPaginas()'''
 
     gerenciado.menu()
 
