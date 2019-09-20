@@ -1,7 +1,8 @@
 import time
 from threading import Thread
+from multiprocessing.pool import ThreadPool
 
-MAXLENLINE = 3
+MAXLENLINE = 10
 TIMESLEEP = 10
 
 def conta10segundos():
@@ -14,17 +15,43 @@ class Node():
         self.bitR  = bitR
         self.tempo = tempo
 
-    def whaitAndChangeBit():
-        while True:
-            Thread(conta10segundos).start
-
-class Gerenciado():
+    def whaitAndChangeBit(self):
+        finalizar = True
+        while not finalizar:
+            finaliar = ThreadPool(conta10segundos).start()
+    
+        self.bitR = 0
+            
+class GerenciadorMemoria():
     def __init__(self):
         self.relogio = Relogio()
 
     def addProcesso(self, tempo):
         self.relogio.addPage(tempo)
 
+    def listarPaginas(self):
+        pages = self.relogio.pages
+        print("\t** Páginas na lista **")
+
+        for i in range(0, len(pages)):
+            print("[Pagina id: {id:}| bitR : {bit:} | tempo : {tempo:}]".format( id= i, bit =pages[i].bitR, tempo = pages[i].tempo ))
+
+    def menu(self):
+        op = -1
+
+        while op != 0:
+            print("-----")
+            print("Digite 1 para criar uma nova página.")
+            print("Digite 2 para listar as páginas que estão na fila.")
+            print("Digite 3 para finalizar o programa")
+            op = input()
+
+            if op == '1':
+                self.addProcesso(10)
+            if op == '2':
+                self.listarPaginas()
+            if op == '3':
+                pass
        
 class Relogio():
     def __init__(self):
@@ -37,7 +64,9 @@ class Relogio():
             self._swapPage(tempo)
             return
 
-        self.pages.append(Node(tempo))
+        newPage = Node(tempo)           # Nava Página
+        self.pages.append(newPage)      # colocando a nova pagina na fila
+        newPage.whaitAndChangeBit()     # iniciando o cantado de 10 segundos da página 
 
         if self._poiter_lastpage is None:
             self.pages[0].next = self.pages[0]
@@ -74,6 +103,7 @@ class Relogio():
         previousIdPage = (position - 1 ) % len(self.pages)
 
         newPage = Node(tempo)
+        newPage.whaitAndChangeBit()
 
         newPage.next = self.pages[previousIdPage].next
 
@@ -87,13 +117,20 @@ class Relogio():
 
 if __name__ == '__main__':
 
-    relogio = Relogio()     
-    relogio.addPage(10)
-    relogio.addPage(20)
-    relogio.addPage(30)
-    relogio.addPage(40)
+    gerenciado = GerenciadorMemoria()
+    '''
+    gerenciado.addProcesso(10)
+    gerenciado.addProcesso(20)
+    gerenciado.addProcesso(30)
+    gerenciado.addProcesso(40)  
+
+    relogio = gerenciado.relogio
     
     for node in relogio.pages :
         print(node.tempo,"->", node.next.tempo)
+
+    gerenciado.listarPaginas()'''
+
+    gerenciado.menu()
 
 
