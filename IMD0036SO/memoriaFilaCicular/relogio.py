@@ -7,6 +7,9 @@ import os
 MAXLENLINE = 10
 TIMESLEEP = 10
 
+GREEN = "\033[0;32m"
+RESET = "\033[0;0m"
+
 def conta10segundos(page):
     time.sleep(TIMESLEEP)
     page.bitR = 0
@@ -47,8 +50,8 @@ class GerenciadorMemoria():
             op = input()
 
             if op == '1':
-                print("\t Digite o tempo ")
                 now = datetime.now()
+                print("\t {g:} Nava página adicionada no instante {t:} {f:}".format(t=now, g= GREEN, f=RESET))
                 self.addProcesso(now)
             if op == '2':
                 self.listarPaginas()
