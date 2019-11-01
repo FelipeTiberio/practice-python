@@ -39,9 +39,19 @@ class Grafo:
         return True
 
     def showMatrix(self):
+        GREEN = "\033[0;32m"
+        RESET = "\033[0;0m"
+        x = 0
+        # label coluna
         for i in self.__adjMatrix:
+            print(GREEN + "{:2}".format(x) + RESET, end = "")
+            x+=1
+        print()
+        linhalabel = 0
+        for i in self.__adjMatrix:
+            print(GREEN + str(0), end='')
             for j in i:
-                print("{:2}".format(j) , end= " ")
+                print("{:2}".format(j) , end= "")
             print(" ")
 
     def removeAresta(self,  id_vertice1, id_vertice2):
