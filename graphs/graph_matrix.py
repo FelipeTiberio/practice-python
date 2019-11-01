@@ -1,8 +1,9 @@
+import math
+
 class Vertice():
     def __init__(self, id, cor):
         self.id = id
         self.cor = cor
-
 
 class Grafo:
     def __init__(self, numVertice) :
@@ -26,11 +27,11 @@ class Grafo:
     def addAresta(self, id_vertice1, id_vertice2):
         if ( id_vertice1 == id_vertice2  ):
             print("A vérteces são iguais.")
-            return
+            return False
 
         if ( id_vertice1 < 0 or id_vertice2 < 0 or id_vertice1 >= self.__numVertice or id_vertice2 >= self.__numVertice):
             print("Valores de vértices não existem.")
-            return
+            return False
 
         self.__adjMatrix[id_vertice1][id_vertice2] = 1
         self.__adjMatrix[id_vertice2][id_vertice1] = 1
@@ -74,12 +75,39 @@ class Grafo:
     def getMatrixAdj(self):
         return self.__adjMatrix
 
+    def __getitem__(self, k):
+        """ Sobrecarrega o operado a[k] para retorna o k-esimo vértice """ 
+        return self.vertices[k]
+
     def __len__(self):
         return self.__numVertice
 
+    def adjSudoku(self):
+        quant_lateral = int(math.sqrt(self.__numVertice))
+        numlinha = 0
+        
+        pass
+    
+    
+           
 
-g = Grafo(4)
 
-g.addAresta(0, 1)
 
-g.showMatrix()
+
+def main():    
+
+    g = Grafo(4)
+
+    g.addAresta(0, 1)
+    g.removeAresta(1,0)
+
+    g.adjSudoku()
+
+    g.showMatrix()
+
+    
+
+    
+
+if (__name__ == '__main__'):
+    main()
