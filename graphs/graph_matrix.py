@@ -39,19 +39,23 @@ class Grafo:
         return True
 
     def showMatrix(self):
+        """ Imprime na tela o estado da matriz de adjacencia @DEBUG """
         GREEN = "\033[0;32m"
         RESET = "\033[0;0m"
         x = 0
         # label coluna
+        print(GREEN, end='  ' )
         for i in self.__adjMatrix:
-            print(GREEN + "{:2}".format(x) + RESET, end = "")
+            print("{:3}".format(x) , end = "")
             x+=1
-        print()
+        print(RESET)
         linhalabel = 0
         for i in self.__adjMatrix:
-            print(GREEN + str(0), end='')
+            print(GREEN + "{:2}".format(str(linhalabel)) + RESET, end='')
+            #print("{g:}{l:3}{R:}".format(g=GREEN, l= str(linhalabel) , R= RESET, end=""))
+            linhalabel +=1
             for j in i:
-                print("{:2}".format(j) , end= "")
+                print("{:3}".format(j) , end= "")
             print(" ")
 
     def removeAresta(self,  id_vertice1, id_vertice2):
@@ -106,7 +110,7 @@ class Grafo:
 
 def main():    
 
-    g = Grafo(4)
+    g = Grafo(16)
 
     g.addAresta(0, 1)
     g.removeAresta(1,0)
