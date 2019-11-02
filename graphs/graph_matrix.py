@@ -6,21 +6,23 @@ class Vertice():
         self.cor = cor
 
 class Grafo:
-    def __init__(self, numVertice) :
-        self.__numVertice = numVertice 
+    def __init__(self, tamanho_bloco) :
+        """ O argumento tamanho do bloco representa o tamanho do lado das regiões do sudoku.
+            Para criar uma instancia de um sudoko do tipo 9x9 o tamanho do bloco será de 3. """
+        self.__numVertice = pow(tamanho_bloco,2) * pow(tamanho_bloco,2)
         self.__adjMatrix = []
         self.vertices = []
 
         # Preenchendo a matrix de adjacencia 
-        for i in range(numVertice):
+        for i in range(self.__numVertice):
             linha = []
-            for j in range(numVertice):
+            for j in range(self.__numVertice):
                 linha.append(0)
             self.__adjMatrix.append(linha)
 
         # Criando todos os vertices do grafo
         id = 0
-        for i in range(numVertice):
+        for i in range(self.__numVertice):
             self.vertices.append( Vertice(id, None))
             id += 1
 
@@ -97,10 +99,13 @@ class Grafo:
         return self.__numVertice
 
     def adjSudoku(self):
-        quant_lateral = int(math.sqrt(self.__numVertice))
-        numlinha = 0
-        
-        pass
+        linha = 1
+        coluna = 1
+
+        for linha in self.__adjMatrix:
+
+            for celula in linha:
+            
     
     
            
@@ -110,18 +115,16 @@ class Grafo:
 
 def main():    
 
-    g = Grafo(16)
+    g = Grafo(2)
 
     g.addAresta(0, 1)
     g.removeAresta(1,0)
 
     g.adjSudoku()
 
-    g.showMatrix()
+    #g.showMatrix()
 
-    
 
-    
 
 if (__name__ == '__main__'):
     main()
