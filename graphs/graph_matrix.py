@@ -29,9 +29,9 @@ class Grafo:
                 linha.append(0)
             self.__adjMatrix.append(linha)
        
-        for i in range( 0 , self.__n ): # Criando todos os vertices do grafo, estou usando tuplas (i,j) para representar a linha e coluna de cada vértice
-            for j in range(0 , self.__n ):
-                self.vertices.append( Vertice( ( int(i % self.__n) ,j),None ) )
+        for i in range( 1 , self.__n + 1 ): # Criando todos os vertices do grafo, estou usando tuplas (i,j) para representar a linha e coluna de cada vértice
+            for j in range(1 , self.__n + 1):
+                self.vertices.append( Vertice( ( int(i % (self.__n + 1)) ,j),None ) )
 
 
 
@@ -66,6 +66,28 @@ class Grafo:
             for j in i:
                 print("{:3}".format(j) , end= "")
             print(" ")
+
+    def showMatrixWithTuples(self):
+        """ Imprime na tela o estado da matriz de adjacencia @DEBUG """
+        GREEN = "\033[0;32m"
+        RESET = "\033[0;0m"
+        
+        # label coluna
+        print(GREEN, end='       ' )
+        for i in self.vertices:
+            print("{:} ".format(str(i.tupla)) , end = "")
+           
+        print(RESET)
+        linhalabel = 0
+        for i in self.__adjMatrix:
+            print(GREEN + "{:2}".format(str(self.vertices[linhalabel].tupla )) + RESET, end='')
+            #print("{g:}{l:3}{R:}".format(g=GREEN, l= str(linhalabel) , R= RESET, end=""))
+            linhalabel +=1
+            for j in i:
+                print("{:3}".format(j) , end= "    ")
+            print(" ")
+
+
 
     def removeAresta(self,  id_vertice1, id_vertice2):
 
@@ -109,14 +131,14 @@ class Grafo:
         """ Dois vértices (i,j) e (i´,j´) são adjacentes quando i=i´ ou j=j´ """
         
         for v1 in self.vertices:
-            for linha in range(self.__n): # adjacencia em colunas
+            for linha in range(1 , self.__n + 1): # adjacencia em colunas
                 v2 = Vertice( (linha, v1.tupla[1]), None ) 
 
                 incide1 = self.vertices.index(v1)
                 incide2 = self.vertices.index(v2)
                 self.addAresta(incide2,incide1)
 
-            for coluna in range(self.__n): # adjacencia em linhas
+            for coluna in range(1 , self.__n + 1): # adjacencia em linhas
                 v2 = Vertice( (v1.tupla[0],coluna ), None ) 
                 
                 incide1 = self.vertices.index(v1)
@@ -124,7 +146,7 @@ class Grafo:
                 self.addAresta(incide2,incide1)
 
             for v2 in self.vertices:
-                if (math.ceil(v1.tupla[0]/self.__n) == math.ceil(v2.tupla[0]/self.__n) and math.ceil(v1.tupla[1]/self.__n) == math.ceil(v2.tupla[1]/self.__n) ):
+                if ((v1.tupla[0]/self.__n) ==(v2.tupla[0]/self.__n) and (v1.tupla[1]/self.__n) == (v2.tupla[1]/self.__n) ):
                     incide1 = self.vertices.index(v1)
                     incide2 = self.vertices.index(v2)
                     self.addAresta(incide2,incide1)
@@ -136,11 +158,9 @@ def main():
     
     g.adjSudoku()
     
+    g. showMatrixWithTuples()
 
-#print("tamanho de g:", len(g))
-    g.showMatrix()
-
-   # print("floor(i/n)=floolr(i'/n)={i:} and floor(j/n)=floolr(j'/n) = {j:}".format(i=math.floor(2/2) ,j=math.floor(3/2)))
+   
 
 
 if (__name__ == '__main__'):
