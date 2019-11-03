@@ -16,7 +16,8 @@ class Vertice():
 class Grafo:
     def __init__(self, tamanho_bloco) :
         """ O argumento tamanho do bloco representa o tamanho do lado das regiões do sudoku.
-            Para criar uma instancia de um sudoko do tipo 9x9 o tamanho do bloco será de 3. """
+            Para criar uma instancia de um sudoko do tipo 9x9 o tamanho do bloco será de 3.
+            Para criar uma instancia de um sudoko do tipo 4x4 o tamanho do bloco será de 2. """
 
         self.__numVertice = pow(tamanho_bloco,2) * pow(tamanho_bloco,2)
         self.__adjMatrix = []
@@ -36,6 +37,7 @@ class Grafo:
 
 
     def addAresta(self, id_vertice1, id_vertice2):
+        """ Rebece os indices, no vetor de vertices, e os torna adjacentes atualizado a matrix de adjacência. """
         if ( id_vertice1 == id_vertice2  ):
             return False
 
@@ -68,7 +70,7 @@ class Grafo:
             print(" ")
 
     def showMatrixWithTuples(self):
-        """ Imprime na tela o estado da matriz de adjacencia @DEBUG """
+        """ Imprime na tela o estado da matriz de adjacencia com label de tuplas @DEBUG """
         GREEN = "\033[0;32m"
         RESET = "\033[0;0m"
         
@@ -121,7 +123,6 @@ class Grafo:
         return self.__adjMatrix
 
     def __getitem__(self, k):
-        """ Sobrecarrega o operado a[k] para retorna o k-esimo vértice """ 
         return self.vertices[k]
 
     def __len__(self):
@@ -145,11 +146,29 @@ class Grafo:
                 incide2 = self.vertices.index(v2)
                 self.addAresta(incide2,incide1)
 
-            for v2 in self.vertices:
+            for v2 in self.vertices: # adjacendi em blocos @TODO está errada 
                 if ((v1.tupla[0]/self.__n) ==(v2.tupla[0]/self.__n) and (v1.tupla[1]/self.__n) == (v2.tupla[1]/self.__n) ):
                     incide1 = self.vertices.index(v1)
                     incide2 = self.vertices.index(v2)
                     self.addAresta(incide2,incide1)
+
+
+def printSudoku(vertices):
+    """ Recebe os vértices que representão o sudoko e imprime na tela o estado atual do jogo """ 
+    n = int( math.sqrt(len(vertices)) )
+    count = 1
+
+    for v in vertices:
+        
+        if(v.cor == None):
+            print("{ponto:3}".format( ponto="."), end= "")
+        else:
+            print("{cor:3}".format(cor=str(v.cor)), end = "" )
+
+        if( (count % n) == 0 ):
+            print()
+        count += 1
+
 
 
 def main():    
@@ -160,6 +179,7 @@ def main():
     
     g. showMatrixWithTuples()
 
+    printSudoku(g.vertices)
    
 
 
