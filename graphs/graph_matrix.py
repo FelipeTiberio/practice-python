@@ -2,7 +2,7 @@ import math
 
 class Vertice():
     def __init__(self, tupla, cor = None):
-        """Atributo tupla (i,j) equivale a linha i e coluna j do jogo de Sudoku .\n
+        """ Atributo tupla (i,j) equivale a linha i e coluna j do jogo de Sudoku .\n
         Atribito cor é o inteiro que marca o número preenchido no jogo."""
         self.tupla = tupla
         self.cor = cor
@@ -128,6 +128,7 @@ class Grafo:
     def __len__(self):
         return self.__numVertice
 
+
     def adjSudoku(self):
         """ Dois vértices (i,j) e (i´,j´) são adjacentes quando i=i´ ou j=j´ """
         
@@ -146,8 +147,16 @@ class Grafo:
                 incide2 = self.vertices.index(v2)
                 self.addAresta(incide2,incide1)
 
-            for v2 in self.vertices: # adjacendi em blocos @TODO está errada 
-                if ((v1.tupla[0]/self.__n) ==(v2.tupla[0]/self.__n) and (v1.tupla[1]/self.__n) == (v2.tupla[1]/self.__n) ):
+            
+            for v2 in self.vertices: # adjacencia entre os quadrantes @TODO (Ainda está errado )
+                v1_quadrante_linha  = ( v1.tupla[0] % int(math.sqrt(self.__numVertice)) ) / self.__n
+                v1_quadrante_coluna = ( v1.tupla[1] / int(math.sqrt(self.__numVertice)) ) / self.__n
+                v2_quadrante_linha  = ( v2.tupla[0] % int(math.sqrt(self.__numVertice)) ) / self.__n
+                v2_quadrante_coluna = ( v2.tupla[1] / int(math.sqrt(self.__numVertice)) ) / self.__n 
+
+               # print( "v1_quadrante_linha =  {v1l:3} | e v2_quandante_colonua = {v2c:}".format( v1l = v1_quadrante_linha, v2c = v2_quadrante_coluna) )
+                #print( "v1_quadrante_coluna = {v1l:3} | e v2_quandante_linha = {v2c:}".format( v1l = v1_quadrante_coluna, v2c = v2_quadrante_linha) )
+                if ( (v1_quadrante_linha == v2_quadrante_linha) and ( v2_quadrante_coluna == v1_quadrante_coluna  ) ):
                     incide1 = self.vertices.index(v1)
                     incide2 = self.vertices.index(v2)
                     self.addAresta(incide2,incide1)
@@ -159,7 +168,7 @@ def printSudoku(vertices):
     count = 1
 
     for v in vertices:
-        
+
         if(v.cor == None):
             print("{ponto:3}".format( ponto="."), end= "")
         else:
@@ -168,7 +177,8 @@ def printSudoku(vertices):
         if( (count % n) == 0 ):
             print()
         count += 1
-
+        
+        
 
 
 def main():    
@@ -177,9 +187,9 @@ def main():
     
     g.adjSudoku()
     
-    g. showMatrixWithTuples()
+    g.showMatrixWithTuples()
 
-    printSudoku(g.vertices)
+    #printSudoku(g.vertices)
    
 
 
