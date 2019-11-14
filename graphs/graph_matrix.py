@@ -24,6 +24,7 @@ class Grafo:
         self.vertices = []
         self.__n = int(math.sqrt(self.__numVertice))
         
+        
         for i in range(self.__numVertice): # Preenchendo a matrix de adjacencia 
             linha = []
             for j in range(self.__numVertice):
@@ -148,18 +149,11 @@ class Grafo:
                 self.addAresta(incide2,incide1)
 
             
-            for v2 in self.vertices: # adjacencia entre os quadrantes @TODO (Ainda está errado )
-                v1_quadrante_linha  = ( v1.tupla[0] % int(math.sqrt(self.__numVertice)) ) / self.__n
-                v1_quadrante_coluna = ( v1.tupla[1] / int(math.sqrt(self.__numVertice)) ) / self.__n
-                v2_quadrante_linha  = ( v2.tupla[0] % int(math.sqrt(self.__numVertice)) ) / self.__n
-                v2_quadrante_coluna = ( v2.tupla[1] / int(math.sqrt(self.__numVertice)) ) / self.__n 
-
-               # print( "v1_quadrante_linha =  {v1l:3} | e v2_quandante_colonua = {v2c:}".format( v1l = v1_quadrante_linha, v2c = v2_quadrante_coluna) )
-                #print( "v1_quadrante_coluna = {v1l:3} | e v2_quandante_linha = {v2c:}".format( v1l = v1_quadrante_coluna, v2c = v2_quadrante_linha) )
-                if ( (v1_quadrante_linha == v2_quadrante_linha) and ( v2_quadrante_coluna == v1_quadrante_coluna  ) ):
-                    incide1 = self.vertices.index(v1)
-                    incide2 = self.vertices.index(v2)
-                    self.addAresta(incide2,incide1)
+            lateral = int( math.sqrt(len(self.vertices)))
+            for i in range( lateral ): # adjacencia entre os quadrantes @TODO (Ainda está errado )
+              for j in range( len(self.vertices) -1 ):
+                  for k in range( j, len(self.vertices) - 1):
+                      self.addAresta
 
 
 def printSudoku(vertices):
@@ -177,7 +171,47 @@ def printSudoku(vertices):
         if( (count % n) == 0 ):
             print()
         count += 1
-        
+
+def colorirSudokuBackTracking(grafo):
+    quantVerticesColoridos = 0
+    
+    for i in range(len(grafo)):     # cada vértice no grafo
+        if grafo[i].cor == None:    # vértice está em branco 
+            cores = set()
+            cores = coresPossiveis(grafo,i) # cores possiveis para o vertice
+           
+            if len(cores) == 0: 
+                return
+            for cor in cores: 
+                grafo[i].cor = cor
+                quantVerticesColoridos += 1
+                colorirSudokuBackTracking(grafo)
+                return #@TODO corrigir aqui
+                if quantVerticesColoridos == len(grafo):
+                    return True
+       
+            
+
+def coresPossiveis(grafo, indice):
+    total = int( math.sqrt( len(grafo) ))
+    cores = set()
+    todasCoresPossiveis = set()
+
+    for i in  range(total):
+        todasCoresPossiveis.add( i + 1 )
+
+    matrixAdj = grafo.getMatrixAdj()
+
+    for i in range(len(matrixAdj[indice])):
+        if ( matrixAdj[indice][i] == 1 and grafo[i].cor != None):
+            cores.add(grafo[i].cor)            
+
+    solucao = todasCoresPossiveis - cores
+    return solucao
+    
+def initPluze(grafo, matrix):
+    pass        
+
         
 
 
@@ -187,9 +221,12 @@ def main():
     
     g.adjSudoku()
     
-    g.showMatrixWithTuples()
+   # g.showMatrixWithTuples()
 
-    #printSudoku(g.vertices)
+    #g.showMatrix()
+
+    colorirSudokuBackTracking(g)
+    printSudoku(g.vertices)
    
 
 
