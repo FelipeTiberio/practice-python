@@ -148,13 +148,15 @@ class Grafo:
                 incide2 = self.vertices.index(v2)
                 self.addAresta(incide2,incide1)
 
-            
-            lateral = int( math.sqrt(len(self.vertices)))
-            for i in range( lateral ): # adjacencia entre os quadrantes @TODO (Ainda está errado )
-              for j in range( len(self.vertices) -1 ):
-                  for k in range( j, len(self.vertices) - 1):
-                      self.addAresta
+        linhas = int( math.sqrt( len(self.vertices)))
+        sizebloco = self.__n    
 
+        for rb in range(0, linhas, sizebloco):
+            for cb in range(0,linhas,sizebloco):
+                for r in range(sizebloco):
+                    for c in range(sizebloco):
+                        self.addAresta( rb +r, cb + c )
+                      
 
 def printSudoku(vertices):
     """ Recebe os vértices que representão o sudoko e imprime na tela o estado atual do jogo """ 
@@ -184,11 +186,13 @@ def colorirSudokuBackTracking(grafo):
                 return
             for cor in cores: 
                 grafo[i].cor = cor
-                quantVerticesColoridos += 1
+                
                 colorirSudokuBackTracking(grafo)
                 return #@TODO corrigir aqui
                 if quantVerticesColoridos == len(grafo):
                     return True
+        else:
+            quantVerticesColoridos += 1
        
             
 
@@ -210,25 +214,43 @@ def coresPossiveis(grafo, indice):
     return solucao
     
 def initPluze(grafo, matrix):
-    pass        
+    indice = 0
+    for linha in matrix:
+        for coluna in linha:
+            if coluna != '.':
+                grafo[indice].cor = int(coluna)
+            indice +=1
 
-        
+def inputfile(filename):
+    input_file = open(filename,"r")
+    cells = []
+    for linha in input_file:
+        coluna = [c for c in linha.replace('\n','')]
+        cells.append( coluna )
+
+    return cells
+            
 
 
 def main():    
 
-    g = Grafo(2)
+    g = Grafo(3)
     
     g.adjSudoku()
     
    # g.showMatrixWithTuples()
 
-    #g.showMatrix()
+   # g.showMatrix()
 
     colorirSudokuBackTracking(g)
-    printSudoku(g.vertices)
    
 
+    initPluze(g,inputfile('test_instance.txt'))
+    
+
+    colorirSudokuBackTracking(g)
+    
+    printSudoku(g.vertices)
 
 if (__name__ == '__main__'):
     main()
