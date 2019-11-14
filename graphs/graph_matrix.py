@@ -1,5 +1,6 @@
 import math
-
+import plotly.graph_objects as go
+import networkx as nx
 class Vertice():
     def __init__(self, tupla, cor = None):
         """ Atributo tupla (i,j) equivale a linha i e coluna j do jogo de Sudoku .\n
@@ -22,7 +23,7 @@ class Grafo:
         self.__numVertice = pow(tamanho_bloco,2) * pow(tamanho_bloco,2)
         self.__adjMatrix = []
         self.vertices = []
-        self.__n = int(math.sqrt(self.__numVertice))
+        self.__lateral = int(math.sqrt(self.__numVertice))
         
         
         for i in range(self.__numVertice): # Preenchendo a matrix de adjacencia 
@@ -31,9 +32,9 @@ class Grafo:
                 linha.append(0)
             self.__adjMatrix.append(linha)
        
-        for i in range( 1 , self.__n + 1 ): # Criando todos os vertices do grafo, estou usando tuplas (i,j) para representar a linha e coluna de cada vértice
-            for j in range(1 , self.__n + 1):
-                self.vertices.append( Vertice( ( int(i % (self.__n + 1)) ,j),None ) )
+        for i in range( 0 , self.__lateral ): # Criando todos os vertices do grafo, estou usando tuplas (i,j) para representar a linha e coluna de cada vértice
+            for j in range(0 , self.__lateral ):
+                self.vertices.append( Vertice( ( int(i % (self.__lateral )) ,j),None ) )
 
 
 
@@ -110,16 +111,6 @@ class Grafo:
 
         return True
 
-    def existeAresta(self, v1, v2):
-        try:
-            return True if self.__adjMatrix[v1][v2] > 0 else False
-
-        except IndexError:
-            print("Valores:", v1,"e", v2, "não são íncides válidos" )
-
-    def grauVertice(self, vertice):
-        pass
-
     def getMatrixAdj(self):
         return self.__adjMatrix
 
@@ -129,33 +120,44 @@ class Grafo:
     def __len__(self):
         return self.__numVertice
 
-
     def adjSudoku(self):
         """ Dois vértices (i,j) e (i´,j´) são adjacentes quando i=i´ ou j=j´ """
         
         for v1 in self.vertices:
-            for linha in range(1 , self.__n + 1): # adjacencia em colunas
+            for linha in range(0 , self.__lateral ): # adjacencia em colunas
                 v2 = Vertice( (linha, v1.tupla[1]), None ) 
 
                 incide1 = self.vertices.index(v1)
                 incide2 = self.vertices.index(v2)
                 self.addAresta(incide2,incide1)
 
-            for coluna in range(1 , self.__n + 1): # adjacencia em linhas
+            for coluna in range(0 , self.__lateral): # adjacencia em linhas
                 v2 = Vertice( (v1.tupla[0],coluna ), None ) 
                 
                 incide1 = self.vertices.index(v1)
                 incide2 = self.vertices.index(v2)
                 self.addAresta(incide2,incide1)
+            
+            for v2 in self.vertices:
 
-        linhas = int( math.sqrt( len(self.vertices)))
-        sizebloco = self.__n    
+                if( v1 != v2):
+                    n = int(math.sqrt( self.__lateral))
 
-        for rb in range(0, linhas, sizebloco):
-            for cb in range(0,linhas,sizebloco):
-                for r in range(sizebloco):
-                    for c in range(sizebloco):
-                        self.addAresta( rb +r, cb + c )
+                    v1_i = math.floor( v1.tupla[0]//n )
+                    v1_j = math.floor( v1.tupla[1]//n )
+
+                    v2_i = math.floor( v2.tupla[0]//n )
+                    v2_j = math.floor( v2.tupla[1]//n )
+
+                    if(  v1_i == v2_i and v1_j == v2_j):
+                        
+                        incide1 = self.vertices.index(v1)
+                        incide2 = self.vertices.index(v2)
+                        self.addAresta(incide2,incide1)
+                        if( self.__adjMatrix[incide1][incide2] != 1):
+                            print(incide1," - ", incide2)
+
+                
                       
 
 def printSudoku(vertices):
@@ -234,23 +236,25 @@ def inputfile(filename):
 
 def main():    
 
-    g = Grafo(3)
+    g = Grafo(2)
     
     g.adjSudoku()
     
-   # g.showMatrixWithTuples()
+    #g.showMatrixWithTuples()
 
-   # g.showMatrix()
+    g.showMatrix()
 
-    colorirSudokuBackTracking(g)
+   # colorirSudokuBackTracking(g)
    
+    #initPluze(g,inputfile('test_instance.txt'))
+ 
 
-    initPluze(g,inputfile('test_instance.txt'))
+    #colorirSudokuBackTracking(g)
     
+    #printSudoku(g.vertices)
 
-    colorirSudokuBackTracking(g)
-    
-    printSudoku(g.vertices)
+    #G = nx.adjacency_matrix(g.getMatrixAdj())
+    print( nx.cycle_graph(10) )
 
 if (__name__ == '__main__'):
     main()
