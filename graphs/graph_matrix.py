@@ -1,6 +1,5 @@
 import math
-import plotly.graph_objects as go
-import networkx as nx
+
 class Vertice():
     def __init__(self, tupla, cor = None):
         """ Atributo tupla (i,j) equivale a linha i e coluna j do jogo de Sudoku .\n
@@ -20,13 +19,13 @@ class Grafo:
             Para criar uma instancia de um sudoko do tipo 9x9 o tamanho do bloco será de 3.
             Para criar uma instancia de um sudoko do tipo 4x4 o tamanho do bloco será de 2. """
 
-        self.__numVertice = pow(tamanho_bloco,2) * pow(tamanho_bloco,2)
-        self.__adjMatrix = []
-        self.vertices = []
-        self.__lateral = int(math.sqrt(self.__numVertice))
+        self.__numVertice = pow(tamanho_bloco,2) * pow(tamanho_bloco,2) # número total de vértices
+        self.__adjMatrix = []                                           # matrix de adjacência 
+        self.vertices = []                                              # lista de vértices
+        self.__lateral = int(math.sqrt(self.__numVertice))              # lateral do quadrado
         
         
-        for i in range(self.__numVertice): # Preenchendo a matrix de adjacencia 
+        for i in range(self.__numVertice): # Preenchendo a matrix de adjacencia com 0's
             linha = []
             for j in range(self.__numVertice):
                 linha.append(0)
@@ -52,7 +51,7 @@ class Grafo:
         return True
 
     def showMatrix(self):
-        """ Imprime na tela o estado da matriz de adjacencia @DEBUG """
+        """ Imprime no terminal o estado da matriz de adjacencia  """
         GREEN = "\033[0;32m"
         RESET = "\033[0;0m"
         x = 0
@@ -71,37 +70,15 @@ class Grafo:
                 print("{:3}".format(j) , end= "")
             print(" ")
 
-    def showMatrixWithTuples(self):
-        """ Imprime na tela o estado da matriz de adjacencia com label de tuplas @DEBUG """
-        GREEN = "\033[0;32m"
-        RESET = "\033[0;0m"
-        
-        # label coluna
-        print(GREEN, end='       ' )
-        for i in self.vertices:
-            print("{:} ".format(str(i.tupla)) , end = "")
-           
-        print(RESET)
-        linhalabel = 0
-        for i in self.__adjMatrix:
-            print(GREEN + "{:2}".format(str(self.vertices[linhalabel].tupla )) + RESET, end='')
-            #print("{g:}{l:3}{R:}".format(g=GREEN, l= str(linhalabel) , R= RESET, end=""))
-            linhalabel +=1
-            for j in i:
-                print("{:3}".format(j) , end= "    ")
-            print(" ")
-
-
-
     def removeAresta(self,  id_vertice1, id_vertice2):
 
         if ( id_vertice1 == id_vertice2  ):
             print("A vérteces são iguais.")
-            return
+            return False
 
         if ( id_vertice1 < 0 or id_vertice2 < 0 or id_vertice1 >= self.__numVertice or id_vertice2 >= self.__numVertice):
             print("Valores de vértices não existem.")
-            return
+            return False
 
         if self.__adjMatrix[ id_vertice1][id_vertice2] == 0:
             return False
@@ -121,8 +98,11 @@ class Grafo:
         return self.__numVertice
 
     def adjSudoku(self):
-        """ Dois vértices (i,j) e (i´,j´) são adjacentes quando i=i´ ou j=j´ """
-        
+        """ 
+        Dois vértices (i,j) e (i´,j´) são adjacentes quando i=i´ ou j=j´  ou 
+        ⌈i/n⌉ = ⌈i′/n⌉ e ⌈j/n⌉ = ⌈j′/n⌉ onde n é o tamanho da lateral de um bloco.
+        """
+        #@TODO caso dê tempo, posso fazer isso se tornar mais eficiente 
         for v1 in self.vertices:
             for linha in range(0 , self.__lateral ): # adjacencia em colunas
                 v2 = Vertice( (linha, v1.tupla[1]), None ) 
@@ -161,7 +141,7 @@ class Grafo:
                       
 
 def printSudoku(vertices):
-    """ Recebe os vértices que representão o sudoko e imprime na tela o estado atual do jogo """ 
+    """ Recebe os vértices que representão o sudoko e imprime no terminal o estado atual do jogo """ 
     n = int( math.sqrt(len(vertices)) )
     count = 1
 
@@ -223,7 +203,9 @@ def initPluze(grafo, matrix):
                 grafo[indice].cor = int(coluna)
             indice +=1
 
-def inputfile(filename):
+def inputfile_to_matrix(filename):
+    """ Recebe um arquivo com uma instância de um jogo de sudoku, 
+    retorna uma matrix com o conteudo do arquivo"""
     input_file = open(filename,"r")
     cells = []
     for linha in input_file:
@@ -240,21 +222,11 @@ def main():
     
     g.adjSudoku()
     
-    #g.showMatrixWithTuples()
-
     g.showMatrix()
-
-   # colorirSudokuBackTracking(g)
    
-    #initPluze(g,inputfile('test_instance.txt'))
+    #initPluze(g,inputfile_to_matrix('test_instance.txt'))
  
-
     #colorirSudokuBackTracking(g)
-    
-    #printSudoku(g.vertices)
-
-    #G = nx.adjacency_matrix(g.getMatrixAdj())
-    print( nx.cycle_graph(10) )
 
 if (__name__ == '__main__'):
     main()
